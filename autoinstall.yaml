@@ -2,8 +2,6 @@ autoinstall:
   version: 1
   identity:
     hostname: ubuntu-desktop
-    username: local-optimum
-    password: "$6$ZE4WV3QRJhPUnsNv$BpkTBYjUOxOiWV5sNPYDSitTwxW.3NHLmhRqptzpa8a4KTxGpkvMaSDbyq4PVri9kdpD1t7ldUBgwB6uveObg."
   storage:
     layout:
       name: lvm
@@ -17,11 +15,13 @@ autoinstall:
     - wget
     - apt-transport-https
     - software-properties-common
-  late-commands:
-    - curtin in-target -- wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
-    - curtin in-target -- dpkg -i ./packages-microsoft-prod.deb
-    - curtin in-target -- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-archive-keyring.gpg
-    - curtin in-target -- echo 'deb [signed-by=/usr/share/keyrings/google-chrome-archive-keyring.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list > /dev/null
-    - curtin in-target -- apt update
-    - curtin in-target -- apt install -y intune-portal
-    - curtin in-target -- apt install -y google-chrome-stable
+  runcmd:
+  - wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
+  - dpkg -i ./packages-microsoft-prod.deb
+  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-archive-keyring.gpg
+  - echo 'deb [signed-by=/usr/share/keyrings/google-chrome-archive-keyring.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list > /dev/null
+  - apt update
+  - apt install -y intune-portal
+  - apt install -y google-chrome-stable
+  user-data:
+    users: ['']
