@@ -10,10 +10,6 @@ autoinstall:
   snaps:
     - name: slack
       classic: false
-    - name: spotify
-      classic: false
-    - name: telegram-desktop
-      classic: false
   packages:
     - vim
     - curl
