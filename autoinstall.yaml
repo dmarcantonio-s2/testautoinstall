@@ -5,8 +5,8 @@ autoinstall:
 
   # This adds the default ubuntu-desktop packages to the system.
   # Any desired additional packages may also be listed here.
-  packages:
-    - ubuntu-desktop
+  # packages:
+  # - ubuntu-desktop
 
   # This adds the default snaps found on a 22.04 Ubuntu Desktop system.
   # Any desired additional snaps may also be listed here.
@@ -16,6 +16,8 @@ autoinstall:
     - name: gtk-common-themes
     - name: snap-store
     - name: snapd-desktop-integration
+    - name: slack
+    - name: spotify
 
   # User creation can occur in one of 3 ways:
   # 1. Create a user using this `identity` section.
