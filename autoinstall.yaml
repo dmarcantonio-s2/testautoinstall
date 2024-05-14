@@ -22,7 +22,10 @@ autoinstall:
     - apt-transport-https
     - software-properties-common
   late-commands:
-    - curtin in-target -- wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb
+    - curtin in-target -- wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
     - curtin in-target -- dpkg -i ./packages-microsoft-prod.deb
+    - curtin in-target -- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-archive-keyring.gpg
+    - curtin in-target -- echo 'deb [signed-by=/usr/share/keyrings/google-chrome-archive-keyring.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list > /dev/null
     - curtin in-target -- apt update
     - curtin in-target -- apt install -y intune-portal
+    - curtin in-target -- apt install -y google-chrome-stable
