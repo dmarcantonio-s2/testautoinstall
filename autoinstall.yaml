@@ -1,27 +1,17 @@
+#cloud-config
 autoinstall:
   version: 1
-  identity:
-    hostname: ubuntu-desktop
+  user-data:
+    oem-config:
+      enable: true
   storage:
     layout:
-      name: lvm
-  snaps:
-    - name: slack
-      classic: false
+      name: lvm  # Adjust this based on your storage preferences
   packages:
-    - vim
-    - curl
-    - gpg
-    - wget
-    - apt-transport-https
-    - software-properties-common
-  runcmd:
-  - wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
-  - dpkg -i ./packages-microsoft-prod.deb
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-archive-keyring.gpg
-  - echo 'deb [signed-by=/usr/share/keyrings/google-chrome-archive-keyring.gpg] https://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list > /dev/null
-  - apt update
-  - apt install -y intune-portal
-  - apt install -y google-chrome-stable
-  user-data:
-    users: ['']
+    - oem-config-gtk  # Installs the graphical OEM setup package
+  late-commands:
+    # Enable OEM mode
+    - curtin in-target --target=/target -- apt-get install oem-config-gtk -y
+    - curtin in-target --target=/target -- systemctl enable oem-config.service
+  interactive-sections:
+    - oem-config
