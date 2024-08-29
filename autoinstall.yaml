@@ -1,17 +1,26 @@
 #cloud-config
 autoinstall:
   version: 1
-  user-data:
-    oem-config:
-      enable: true
+  locale: en_US  # Set your preferred locale
+  keyboard:
+    layout: us  # Set your preferred keyboard layout
+  network:
+    network:
+      version: 2
+      ethernets:
+        eth0:
+          dhcp4: true  # Configures network with DHCP
   storage:
     layout:
-      name: lvm  # Adjust this based on your storage preferences
+      name: direct  # Direct layout without LVM, adjust as needed
+  user-data:
+    oem-config:
+      enable: true  # Enable OEM mode
   packages:
-    - oem-config-gtk  # Installs the graphical OEM setup package
+    - oem-config-gtk  # Install necessary OEM configuration package
   late-commands:
-    # Enable OEM mode
-    - curtin in-target --target=/target -- apt-get install oem-config-gtk -y
+    - curtin in-target --target=/target -- apt-get update
+    - curtin in-target --target=/target -- apt-get install -y oem-config oem-config-gtk
     - curtin in-target --target=/target -- systemctl enable oem-config.service
   interactive-sections:
     - oem-config
